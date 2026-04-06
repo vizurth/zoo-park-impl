@@ -4,6 +4,7 @@ import zoopark.interfaces.Trainable;
 import zoopark.enums.ZooSection;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class Zoo {
@@ -36,5 +37,15 @@ public class Zoo {
         }
 
         return Optional.empty();
+    }
+
+    public <T extends Animal> List<T> getAnimalsByType(Class<T> type) {
+        List<T> result = new ArrayList<>();
+        for (ZooEntry ze : animals) {
+            if (type.isInstance(ze.getAnimal())) {
+                result.add(type.cast(ze.getAnimal()));
+            }
+        }
+        return result;
     }
 }

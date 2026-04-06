@@ -24,9 +24,9 @@ public abstract class Animal {
     public String getInfo() {
         StringBuilder strBuild = new StringBuilder();
 
-        strBuild.append("Name: ").append(name).append(" ");
-        strBuild.append("Age: ").append(age).append(" ");
-        strBuild.append("Weight: ").append(weight).append(" ");
+        strBuild.append("Name: ").append(name).append("; ");
+        strBuild.append("Age: ").append(age).append("; ");
+        strBuild.append("Weight: ").append(weight).append("; ");
 
         return strBuild.toString();
     }

@@ -5,15 +5,19 @@ import zoopark.enums.PossibleFood;
 import zoopark.enums.ZooSection;
 import zoopark.model.Zoo;
 
+import java.util.List;
+
 public class Main {
     static void main(String[] args) {
         Zoo zoo = new Zoo();
 
         Dog dog = new Dog("Buddy", 3, 12.5);
+        Dog dog1 = new Dog("BOBIK", 6, 16);
         Cat cat = new Cat("Whiskers", 5, 4.2);
         Parrot parrot = new Parrot("Kesha", 2, 0.8);
 
         zoo.addAnimal(dog, ZooSection.MAMMALS);
+        zoo.addAnimal(dog1, ZooSection.MAMMALS);
         zoo.addAnimal(cat, ZooSection.MAMMALS);
         zoo.addAnimal(parrot, ZooSection.BIRDS);
 
@@ -46,5 +50,11 @@ public class Main {
             entry -> System.out.println("Found: " + entry.getAnimal().getInfo()),
             () -> System.out.println("Rex not found")
         );
+
+        System.out.println("\n=== Find Dog ===");
+        List<Dog> dogs = zoo.getAnimalsByType(Dog.class);
+        for (Dog d : dogs) {
+            System.out.println(d.getInfo());
+        }
     }
 }
