@@ -17,7 +17,6 @@ public class Main {
         zoo.addAnimal(cat, ZooSection.MAMMALS);
         zoo.addAnimal(parrot, ZooSection.BIRDS);
 
-        // --- Кормим животных ---
         System.out.println("=== Feeding ===");
         dog.eat(PossibleFood.STEAK);
         dog.eat(PossibleFood.VEGETABLES);   // не ест
@@ -26,7 +25,6 @@ public class Main {
         parrot.eat(PossibleFood.SEEDS);
         parrot.eat(PossibleFood.RAW_MEAT);  // не ест
 
-        // --- Тренируем тех, кто умеет ---
         System.out.println("\n=== Training ===");
         dog.train("sit");
         dog.train("shake");
@@ -35,11 +33,9 @@ public class Main {
         System.out.println("Buddy knows: " + dog.getCommands());
         System.out.println("Kesha knows: " + parrot.getCommands());
 
-        // --- Выводим всех животных ---
         System.out.println("\n=== All animals ===");
         zoo.printAllAnimals();
 
-        // --- Поиск по имени ---
         System.out.println("\n=== Find by name ===");
         zoo.findByName("Buddy").ifPresentOrElse(
             entry -> System.out.println("Found: " + entry.getAnimal().getInfo()),
