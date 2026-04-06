@@ -2,7 +2,8 @@ import zoopark.animals.Cat;
 import zoopark.animals.Dog;
 import zoopark.animals.Parrot;
 import zoopark.enums.PossibleFood;
-import zoopark.enums.ZooSection;
+import zoopark.model.Animal;
+import zoopark.model.Section;
 import zoopark.model.Zoo;
 
 import java.util.List;
@@ -16,10 +17,16 @@ public class Main {
         Cat cat = new Cat("Whiskers", 5, 4.2);
         Parrot parrot = new Parrot("Kesha", 2, 0.8);
 
-        zoo.addAnimal(dog, ZooSection.MAMMALS);
-        zoo.addAnimal(dog1, ZooSection.MAMMALS);
-        zoo.addAnimal(cat, ZooSection.MAMMALS);
-        zoo.addAnimal(parrot, ZooSection.BIRDS);
+        Section<Animal> mammals = new Section<>("Mammals");
+        Section<Parrot> birds = new Section<>("Birds");
+
+        mammals.add(dog);
+        mammals.add(dog1);
+        mammals.add(cat);
+        birds.add(parrot);
+
+        zoo.addSection(mammals);
+        zoo.addSection(birds);
 
         System.out.println("=== Feeding ===");
         dog.eat(PossibleFood.STEAK);
@@ -42,12 +49,12 @@ public class Main {
 
         System.out.println("\n=== Find by name ===");
         zoo.findByName("Buddy").ifPresentOrElse(
-            entry -> System.out.println("Found: " + entry.getAnimal().getInfo()),
+            entry -> System.out.println("Found: " + entry.getInfo()),
             () -> System.out.println("Not found")
         );
 
         zoo.findByName("Rex").ifPresentOrElse(
-            entry -> System.out.println("Found: " + entry.getAnimal().getInfo()),
+            entry -> System.out.println("Found: " + entry.getInfo()),
             () -> System.out.println("Rex not found")
         );
 
