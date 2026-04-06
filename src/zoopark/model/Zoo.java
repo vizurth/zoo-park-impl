@@ -18,6 +18,7 @@ public class Zoo {
         for (Animal a : section.getAnimals()) {
             animalMap.put(a.getName(), a);
         }
+        section.setOnAdd(a -> animalMap.put(a.getName(), a));
     }
 
     public void printAllAnimals() {
@@ -34,14 +35,12 @@ public class Zoo {
     }
 
     public Optional<Animal> findByName(String name) {
-        Animal res = this.animalMap.get(name);
-
-        return Optional.ofNullable(res);
+        return Optional.ofNullable(this.animalMap.get(name));
     }
 
     public <T extends Animal> List<T> getAnimalsByType(Class<T> type) {
         List<T> result = new ArrayList<>();
-        for (Section<? extends Animal> s :sections) {
+        for (Section<? extends Animal> s : sections) {
             for (Animal a : s.getAnimals()) {
                 if (type.isInstance(a)) {
                     result.add(type.cast(a));

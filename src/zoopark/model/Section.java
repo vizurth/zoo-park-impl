@@ -1,10 +1,12 @@
 package zoopark.model;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public class Section<T extends Animal> {
     private final String name;
     private final List<T> animals = new ArrayList<>();
+    private Consumer<T> onAdd;
 
     public Section(String name) {
         this.name = name;
@@ -12,6 +14,13 @@ public class Section<T extends Animal> {
 
     public void add(T animal) {
         animals.add(animal);
+        if (onAdd != null) {
+            onAdd.accept(animal);
+        }
+    }
+
+    public void setOnAdd(Consumer<T> onAdd) {
+        this.onAdd = onAdd;
     }
 
     public String getName() {
