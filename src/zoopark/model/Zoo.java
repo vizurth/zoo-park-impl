@@ -1,5 +1,7 @@
 package zoopark.model;
 
+import zoopark.exceptions.AnimalAlreadyExistsException;
+import zoopark.exceptions.AnimalNotFoundException;
 import zoopark.interfaces.Trainable;
 
 import java.util.*;
@@ -16,9 +18,16 @@ public class Zoo {
     public <T extends Animal> void addSection(Section<T> section) {
         sections.add(section);
         for (Animal a : section.getAnimals()) {
-            animalMap.put(a.getName(), a);
+            registerAnimal(a);
         }
-        section.setOnAdd(a -> animalMap.put(a.getName(), a));
+        section.setOnAdd(this::registerAnimal);
+    }
+
+    private void registerAnimal(Animal animal) {
+        if (animalMap.containsKey(animal.getName())) {
+            throw new AnimalAlreadyExistsException(animal.getName());
+        }
+        animalMap.put(animal.getName(), animal);
     }
 
     public void printAllAnimals() {
@@ -36,6 +45,12 @@ public class Zoo {
 
     public Optional<Animal> findByName(String name) {
         return Optional.ofNullable(this.animalMap.get(name));
+    }
+
+    public Animal getByName(String name) {
+        Animal animal = animalMap.get(name);
+        if (animal == null) throw new AnimalNotFoundException(name);
+        return animal;
     }
 
     public <T extends Animal> List<T> getAnimalsByType(Class<T> type) {

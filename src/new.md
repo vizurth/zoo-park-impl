@@ -1,63 +1,119 @@
-# Java — Коллекции (07)
+# Java — Обработка исключений (Глава 5)
 
 ## Что изучено
 
-### Основы
-- Введение в коллекции — зачем нужны, чем отличаются от массивов
-- Оценка сложности алгоритмов — Big O notation (O(1), O(n), O(log n), O(n²))
+### try...catch...finally
+- `try` — блок где может возникнуть исключение
+- `catch` — перехват и обработка исключения
+- `finally` — выполняется всегда, независимо от того было исключение или нет
+- Можно ловить несколько исключений через несколько `catch` блоков
 
-### Список (List)
-- **ArrayList** — динамический массив, быстрый доступ по индексу O(1), медленная вставка в середину O(n)
-- **LinkedList** — двусвязный список, быстрая вставка/удаление O(1), медленный доступ по индексу O(n)
+```java
+try {
+    int result = 10 / 0;
+} catch (ArithmeticException e) {
+    System.out.println("Ошибка: " + e.getMessage());
+} finally {
+    System.out.println("Выполнится всегда");
+}
+```
 
-### Итераторы
-- **Iterator** — интерфейс для обхода коллекций (`hasNext()`, `next()`, `remove()`)
-- Паттерн итератора, использование в цикле `while` и `for-each`
+---
 
-### Методы equals и hashCode
-- `equals()` — сравнение объектов по содержимому (не по ссылке)
-- `hashCode()` — числовой хэш объекта, используется в HashMap/HashSet
-- Контракт: если `a.equals(b)` → `a.hashCode() == b.hashCode()`
+### Иерархия классов исключений
 
-### Map
-- **HashMap** — хранит пары ключ-значение, доступ O(1), порядок не гарантирован
-- **LinkedHashMap** — то же что HashMap, но сохраняет порядок вставки
-- **TreeMap** — хранит ключи в отсортированном порядке, доступ O(log n)
+```
+Throwable
+├── Error          — критические ошибки JVM (не ловить!)
+│   ├── StackOverflowError
+│   └── OutOfMemoryError
+└── Exception      — обычные исключения
+    ├── RuntimeException        — Unchecked (не обязательно ловить)
+    │   ├── NullPointerException
+    │   ├── ArrayIndexOutOfBoundsException
+    │   ├── ArithmeticException
+    │   ├── ClassCastException
+    │   └── IllegalArgumentException
+    └── IOException             — Checked (обязательно обрабатывать)
+        └── FileNotFoundException
+```
 
-### Set
-- **Set** — коллекция уникальных элементов (нет дубликатов)
-- Реализации: `HashSet`, `LinkedHashSet`, `TreeSet`
+**Checked** — компилятор заставляет обработать (try/catch или throws)
+**Unchecked** — на усмотрение разработчика (RuntimeException и его наследники)
 
-### Сортировка
-- `Collections.sort()` — сортировка списка
-- `Comparable` — интерфейс для естественной сортировки (`compareTo()`)
-- `Comparator` — внешний компаратор для кастомной сортировки
+---
 
-### Старые коллекции
-- `Vector`, `Stack`, `Hashtable` — устаревшие, не использовать в новом коде
+### throws и throw
+
+**throw** — вручную бросить исключение:
+```java
+throw new IllegalArgumentException("Возраст не может быть отрицательным");
+```
+
+**throws** — объявить что метод может бросить исключение (аналог `error` в Go):
+```java
+public void readFile(String path) throws IOException {
+    // ...
+}
+```
+
+---
+
+### Создание своих исключений
+
+```java
+// Unchecked — наследуемся от RuntimeException
+public class InvalidAgeException extends RuntimeException {
+    public InvalidAgeException(String message) {
+        super(message);
+    }
+}
+
+// Checked — наследуемся от Exception
+public class ZooCapacityException extends Exception {
+    public ZooCapacityException(String message) {
+        super(message);
+    }
+}
+
+// Использование
+throw new InvalidAgeException("Возраст не может быть отрицательным: " + age);
+```
+
+---
+
+### Assert
+
+- Используется для проверок во время разработки/отладки
+- По умолчанию **выключен** в JVM, включается флагом `-ea`
+- В продакшене не использовать — только для отладки
+
+```java
+assert age > 0 : "Возраст должен быть положительным";
+```
 
 ---
 
 ## Шпаргалка — когда что использовать
 
-| Структура | Когда использовать |
+| Ситуация | Что делать |
 |---|---|
-| `ArrayList` | Нужен быстрый доступ по индексу, редкая вставка в середину |
-| `LinkedList` | Частая вставка/удаление в начало или середину |
-| `HashMap` | Пары ключ-значение, порядок не важен |
-| `LinkedHashMap` | Пары ключ-значение, нужен порядок вставки |
-| `TreeMap` | Пары ключ-значение, нужна сортировка по ключу |
-| `HashSet` | Уникальные элементы, порядок не важен |
-| `TreeSet` | Уникальные элементы в отсортированном порядке |
+| Ошибка в логике программы | `RuntimeException` (Unchecked) |
+| Внешние ресурсы (файлы, сеть) | `Exception` (Checked) |
+| Критическая ошибка JVM | Не ловить `Error` |
+| Проверка аргументов метода | `throw new IllegalArgumentException` |
+| Null значение | `throw new NullPointerException` или проверка |
+| Отладка | `assert` |
 
 ---
 
-## Big O — шпаргалка
+## Аналогия с Go
 
-| Операция | ArrayList | LinkedList | HashMap |
-|---|---|---|---|
-| get(i) | O(1) | O(n) | O(1) |
-| add(конец) | O(1) | O(1) | — |
-| add(середина) | O(n) | O(1) | — |
-| contains | O(n) | O(n) | O(1) |
-| remove | O(n) | O(1) | O(1) |
+| Java | Go |
+|---|---|
+| `try/catch` | `if err != nil` |
+| `throws` | возвращаемый `error` в сигнатуре |
+| `throw` | `return nil, errors.New(...)` |
+| Checked Exception | обязательная обработка `error` |
+| Unchecked Exception | `panic` |
+| `finally` | `defer` |

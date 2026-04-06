@@ -14,8 +14,17 @@ public abstract class Animal implements Comparable<Animal> {
     }
 
     protected Animal(String name, int age, double weight) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Invalid animal name");
+        }
         this.name = name;
+        if (age < 0 || age > 100) {
+            throw new IllegalArgumentException("Invalid animal age");
+        }
         this.age = age;
+        if  (weight < 0 || weight > 100) {
+            throw new IllegalArgumentException("Invalid animal weight");
+        }
         this.weight = weight;
 
         totalAnimals++;
@@ -35,18 +44,30 @@ public abstract class Animal implements Comparable<Animal> {
 
     // Setter
     public void setName(String value) {
+        if (value == null || value.isEmpty()) {
+            throw new IllegalArgumentException("Invalid animal name");
+        }
         this.name = value;
     }
 
     public void setAge(int value) {
+        if (value < 0 || value > 100) {
+            throw new IllegalArgumentException("Invalid animal age");
+        }
         this.age = value;
     }
 
     public void setWeight(double value) {
+        if (value < 0 || value > 100) {
+            throw new IllegalArgumentException("Invalid animal weight");
+        }
         this.weight = value;
     }
 
     public void addWeight(double value) {
+        if (value < 0 || value > 10) {
+            throw new IllegalArgumentException("Invalid animal adding weight");
+        }
         this.weight += value;
     }
 
@@ -80,3 +101,4 @@ public abstract class Animal implements Comparable<Animal> {
         return Integer.compare(age, a.getAge());
     }
 }
+

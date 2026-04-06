@@ -1,5 +1,7 @@
 package zoopark.model;
 
+import zoopark.exceptions.AnimalAlreadyExistsException;
+
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -13,6 +15,9 @@ public class Section<T extends Animal> {
     }
 
     public void add(T animal) {
+        if (animal == null) {
+            throw new IllegalArgumentException("Animal cannot be null");
+        }
         animals.add(animal);
         if (onAdd != null) {
             onAdd.accept(animal);
