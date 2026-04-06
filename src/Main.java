@@ -9,7 +9,7 @@ import zoopark.model.Zoo;
 import java.util.List;
 
 public class Main {
-    static void main(String[] args) {
+   public static void main(String[] args) {
         Zoo zoo = new Zoo();
 
         Dog dog = new Dog("Buddy", 3, 12.5);

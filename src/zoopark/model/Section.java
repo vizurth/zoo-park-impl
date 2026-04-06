@@ -1,8 +1,6 @@
 package zoopark.model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Section<T extends Animal> {
     private final String name;
@@ -22,5 +20,23 @@ public class Section<T extends Animal> {
 
     public List<T> getAnimals() {
         return Collections.unmodifiableList(animals);
+    }
+
+    public List<T> getSortedAnimals(Comparator<T> comparator) {
+        List<T> sorted = new ArrayList<>(animals);
+        sorted.sort(comparator);
+        return sorted;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Section<?> section = (Section<?>) o;
+        return Objects.equals(name, section.name) && Objects.equals(animals, section.animals);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, animals);
     }
 }

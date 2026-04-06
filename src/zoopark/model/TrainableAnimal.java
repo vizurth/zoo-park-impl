@@ -2,12 +2,10 @@ package zoopark.model;
 
 import zoopark.interfaces.Trainable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public abstract class TrainableAnimal extends Animal implements Trainable {
-    private final List<String> commands = new ArrayList<>();
+    private final Set<String> commands = new LinkedHashSet<>();
 
     protected TrainableAnimal() {
         super();
@@ -17,8 +15,8 @@ public abstract class TrainableAnimal extends Animal implements Trainable {
         super(name, age, weight);
     }
 
-    public List<String> getCommands() {
-        return Collections.unmodifiableList(commands);
+    public Set<String> getCommands() {
+        return Collections.unmodifiableSet(commands);
     }
 
     @Override

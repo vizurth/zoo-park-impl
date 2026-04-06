@@ -1,6 +1,8 @@
 package zoopark.model;
 
-public abstract class Animal {
+import java.util.Objects;
+
+public abstract class Animal implements Comparable<Animal> {
     private String name;
     private int age;
     private double weight;
@@ -61,4 +63,20 @@ public abstract class Animal {
         return this.weight;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Animal animal = (Animal) o;
+        return age == animal.age && Double.compare(weight, animal.weight) == 0 && Objects.equals(name, animal.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, age, weight);
+    }
+
+    @Override
+    public int compareTo(Animal a) {
+        return Integer.compare(age, a.getAge());
+    }
 }
